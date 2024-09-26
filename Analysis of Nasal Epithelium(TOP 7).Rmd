@@ -1,0 +1,98 @@
+---
+title: "Analysis of Nasal Epithelium in Smokers and NonSmokers"
+output: html_document
+date: "2024-09-26"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 	Expression data from buccal and nasal epithelium of current and never smokers
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+library(dplyr)
+library(tidyverse)
+library(GEOquery)
+
+#data cleaned in separate workspace
+#first 7 genes were extracted 
+
+# Create expression data matrix across 7 genes
+expression_data <- data.frame(
+  Gene = c("MIR4640", "RFC2", "HSPA6", "PAX8", "GUCA1A", "MIR5193", "THRA"),
+  Sample1 = c(5236.48, 237.5170, 100.4390, 1123.9900, 34.7732, 348.8550, 118.3010),
+  Sample2 = c(6183.2, 225.65300, 159.24800, 1258.00000, 9.23039, 399.54000, 126.44900),
+  Sample3 = c(5171.48, 225.01700, 136.26700, 923.85900, 8.90546, 429.15500, 116.14100),
+  Sample4 = c(4553.4, 134.2670, 45.6665, 619.6690, 29.3123, 342.0000, 93.1706),
+  Sample5 = c(6094.66, 228.1800, 166.1320, 1369.2800, 60.9262, 1161.0500, 159.6530),
+  Sample6 = c(5976.88, 235.723, 132.373, 1215.570, 55.368, 486.014, 128.066),
+  Sample7 = c(7713.88, 262.2080, 47.6219, 1102.9000, 61.0796, 754.3390, 101.3990),
+  Sample8 = c(6781.24, 254.174, 127.556, 1377.010, 83.120, 760.100, 116.583),
+  Sample9 = c(4948.99, 196.7490, 160.1350, 1195.4000, 37.0302, 403.2180, 118.1060),
+  Sample10 = c(5029.57, 188.7460, 125.7430, 1176.8900, 30.8798, 478.7310, 85.1356),
+  Sample11 = c(5892.17, 202.1670, 163.9650, 959.1010, 31.6348, 475.1940, 147.7340),
+  Sample12 = c(6534.86, 174.62200, 51.95170, 926.23500, 4.08673, 393.89700, 180.75500),
+  Sample13 = c(8393.72, 178.9760, 140.1410, 984.3440, 64.7151, 527.1790, 83.9113),
+  Sample14 = c(6367.62, 220.6430, 325.3390, 1850.0100, 15.3595, 469.2370, 314.8110),
+  Sample15 = c(8266.48, 215.6060, 140.8650, 1200.3600, 29.2318, 499.7910, 94.9472)
+)
+
+# View the data
+expression_data
+
+rownames(expression_data) <- expression_data$Gene
+expression_data <- expression_data[, -1]  # Remove the gene column as it's now rownames
+
+# View the data
+head(expression_data)
+
+
+# Normalize the data using log2 transformation
+log2_data <- log2(expression_data + 1)  # Adding 1 to avoid log of zero
+
+# View the transformed data
+head(log2_data)
+
+
+# Load necessary package
+#install.packages("pheatmap")
+library(pheatmap)
+
+# Correct mapping based on the order in the data file
+gsm_mapping <- data.frame(
+  GSM = c("GSM227868", "GSM227870", "GSM227871", "GSM227874", "GSM227876", 
+          "GSM227877", "GSM227878", "GSM227880", "GSM227869", "GSM227872", 
+          "GSM227873", "GSM227875", "GSM227879", "GSM227881", "GSM227882"),
+  Sample = c("Sample1", "Sample2", "Sample3", "Sample4", "Sample5", 
+             "Sample6", "Sample7", "Sample8", "Sample9", "Sample10", 
+             "Sample11", "Sample12", "Sample13", "Sample14", "Sample15")
+)
+
+# View the corrected mapping
+print(gsm_mapping)
+
+# Replace the column names of the expression data (except the Gene column) with GSM identifiers
+colnames(expression_data) <- gsm_mapping$GSM
+
+# View the modified expression_data
+print(expression_data)
+
+# Create a heatmap
+pheatmap(log2_data,
+         cluster_rows = TRUE,
+         cluster_cols = TRUE,
+         show_rownames = TRUE,
+         show_colnames = TRUE,
+         color = colorRampPalette(c("blue", "white", "red"))(50),
+         main = "Gene Expression Heatmap"
+)
+
+```
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
