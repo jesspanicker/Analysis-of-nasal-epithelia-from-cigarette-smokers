@@ -1,5 +1,5 @@
 ---
-title: "Analysis of Nasal Epithelium in Smokers and NonSmokers"
+title: "Analysis of Nasal Epithelium in Smokers and NonSmokers Across 7 Genes"
 output: html_document
 date: "2024-09-26"
 ---
@@ -8,7 +8,7 @@ date: "2024-09-26"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## 	Expression data from buccal and nasal epithelium of current and never smokers
+## 	Expression data from nasal epithelium of current and never smokers
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
